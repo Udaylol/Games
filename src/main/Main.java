@@ -9,7 +9,7 @@ public class Main {
         window.setResizable(false);
         window.setTitle("2D Game");
 
-        GamePanel gamePanel = new GamePanel();
+        GameScreen gamePanel = new GameScreen();
         window.add(gamePanel);
         window.pack();
         window.setLocationRelativeTo(null);

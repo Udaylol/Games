@@ -5,40 +5,44 @@ import entity.Player;
 import javax.swing.*;
 import java.awt.*;
 
-public class GamePanel extends JPanel implements Runnable {
-    final int originalTileSize = 16;
-    final int scale = 3;
+public class GameScreen extends JPanel implements Runnable {
 
-    public final int tileSize = originalTileSize * scale; // 48px
-    final int maxScreenRow = 12;
-    final int maxScreenCol = 16;
-    final int screenHeight = maxScreenRow * tileSize; // 576px
-    final int screenWidth = maxScreenCol * tileSize; // 768px
-    final int FPS = 60;
+    // SCREEN SETTINGS
+    private final int ORIGINALTILESIZE = 16;
+    private final int SCALE = 3;
+    public final int TILESIZE = ORIGINALTILESIZE * SCALE; // 48px
+    private final int SCREENROWS = 12;
+    private final int SCREENCOLS = 16;
+    private final int SCREENHEIGHT = SCREENROWS * TILESIZE; // 576px
+    private final int SCREENWIDTH = SCREENCOLS * TILESIZE; // 768px
 
-    Thread gameThread;
-    KeyHandler keyHandler = new KeyHandler();
-    Player player = new Player(this, keyHandler);
+    // FPS
+    private final int FPS = 60;
+
+    // INITIALISATION
+    Thread game;
+    KeyHandler key = new KeyHandler();
+    Player player = new Player(this, key);
 
 
-    public GamePanel() {
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+    public GameScreen() {
+        this.setPreferredSize(new Dimension(SCREENWIDTH, SCREENHEIGHT));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.addKeyListener(keyHandler);
+        this.addKeyListener(key);
         this.setFocusable(true);
     }
 
     public void startGameThread() {
-        gameThread = new Thread(this);
-        gameThread.start();
+        game = new Thread(this);
+        game.start();
     }
 
     @Override
     public void run() {
         double drawInterval = 1e9 / FPS;
         double nextDrawTime = System.nanoTime() + drawInterval;
-        while (gameThread != null) {
+        while (game != null) {
 
             // 1 UPDATE: update information
             update();
