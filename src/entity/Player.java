@@ -9,22 +9,17 @@ import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 public class Player extends Entity {
-    Screen screen;
     KeyHandler key;
 
     public final int screenX;
     public final int screenY;
 
     // CONSTRUCTOR
-    public Player(Screen screen, KeyHandler key) {
-        this.screen = screen;
+    public Player(KeyHandler key) {
         this.key = key;
 
-//        this.screenX = screen.WIDTH/2 - screen.TILE_SIZE/2;
-//        this.screenY = screen.HEIGHT/2 - screen.TILE_SIZE/2;
-
-        this.screenX = screen.WIDTH/2 - screen.TILE_SIZE/2;
-        this.screenY = screen.HEIGHT/2 - screen.TILE_SIZE/2;
+        this.screenX = Screen.WIDTH / 2 - Screen.TILE_SIZE / 2;
+        this.screenY = Screen.HEIGHT / 2 - Screen.TILE_SIZE / 2;
 
         this.setDefaultValues();
         this.getPlayerImage();
@@ -32,8 +27,8 @@ public class Player extends Entity {
 
     // PUBLIC METHODS
     public void setDefaultValues() {
-        worldX = screen.TILE_SIZE * 23;
-        worldY = screen.TILE_SIZE * 21;
+        worldX = Screen.TILE_SIZE * 23;
+        worldY = Screen.TILE_SIZE * 21;
         speed = 4;
         direction = 'D';
         up = new BufferedImage[2];
@@ -81,25 +76,29 @@ public class Player extends Entity {
             case 'R' -> right[spriteIdx];
             default -> null;
         };
-        g2.drawImage(image, screenX, screenY, screen.TILE_SIZE, screen.TILE_SIZE, null);
+        g2.drawImage(image, screenX, screenY, Screen.TILE_SIZE, Screen.TILE_SIZE, null);
     }
 
     private void moveUp() {
         direction = 'U';
         worldY -= speed;
     }
+
     private void moveDown() {
         direction = 'D';
         worldY += speed;
     }
+
     private void moveLeft() {
         direction = 'L';
         worldX -= speed;
     }
+
     private void moveRight() {
         direction = 'R';
         worldX += speed;
     }
+
     private void updateSprite() {
         spriteCnt = (spriteCnt + 1) % 20;
         spriteIdx = (spriteCnt < 10) ? 0 : 1;
