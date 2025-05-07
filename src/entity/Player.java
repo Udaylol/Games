@@ -12,18 +12,29 @@ public class Player extends Entity {
     Screen screen;
     KeyHandler key;
 
+    public final int screenX;
+    public final int screenY;
+
     // CONSTRUCTOR
     public Player(Screen screen, KeyHandler key) {
         this.screen = screen;
         this.key = key;
+
+//        this.screenX = screen.WIDTH/2 - screen.TILE_SIZE/2;
+//        this.screenY = screen.HEIGHT/2 - screen.TILE_SIZE/2;
+
+        this.screenX = screen.WIDTH/2 - screen.TILE_SIZE/2;
+        this.screenY = screen.HEIGHT/2 - screen.TILE_SIZE/2;
+
         this.setDefaultValues();
         this.getPlayerImage();
     }
 
     // PUBLIC METHODS
     public void setDefaultValues() {
-        x = y = 100;
-        speed = 2;
+        worldX = screen.TILE_SIZE * 23;
+        worldY = screen.TILE_SIZE * 21;
+        speed = 4;
         direction = 'D';
         up = new BufferedImage[2];
         down = new BufferedImage[2];
@@ -70,24 +81,24 @@ public class Player extends Entity {
             case 'R' -> right[spriteIdx];
             default -> null;
         };
-        g2.drawImage(image, x, y, screen.TILE_SIZE, screen.TILE_SIZE, null);
+        g2.drawImage(image, screenX, screenY, screen.TILE_SIZE, screen.TILE_SIZE, null);
     }
 
     private void moveUp() {
         direction = 'U';
-        y -= speed;
+        worldY -= speed;
     }
     private void moveDown() {
         direction = 'D';
-        y += speed;
+        worldY += speed;
     }
     private void moveLeft() {
         direction = 'L';
-        x -= speed;
+        worldX -= speed;
     }
     private void moveRight() {
         direction = 'R';
-        x += speed;
+        worldX += speed;
     }
     private void updateSprite() {
         spriteCnt = (spriteCnt + 1) % 20;

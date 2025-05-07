@@ -9,14 +9,17 @@ import java.awt.*;
 public class Screen extends JPanel implements Runnable {
 
     // SCREEN SETTINGS
-    private final int originalTileSize = 16;
-    private final int scale = 3;
-
-    public final int TILE_SIZE = originalTileSize * scale; // 48px
+    public final int TILE_SIZE = 16 * 3; // 16px scaled 3 times for bigger screen (48px)
     public final int ROWS = 12;
     public final int COLS = 16;
     public final int HEIGHT = ROWS * TILE_SIZE; // 576px
     public final int WIDTH = COLS * TILE_SIZE; // 768px
+
+    // WORLD SETTINGS
+    public final int WORLD_ROWS = 50;
+    public final int WORLD_COLS = 50;
+    private final int WORLD_WIDTH = WORLD_COLS * TILE_SIZE;
+    private final int WORLD_HEIGHT = WORLD_ROWS * TILE_SIZE;
 
     // FPS
     private final int FPS = 60;
@@ -25,7 +28,7 @@ public class Screen extends JPanel implements Runnable {
     Thread game;
     KeyHandler keyHandler = new KeyHandler();
     TileManager tileManager = new TileManager(this);
-    Player player = new Player(this, keyHandler);
+    public Player player = new Player(this, keyHandler);
 
 
     public Screen() {

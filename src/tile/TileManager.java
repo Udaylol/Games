@@ -15,7 +15,6 @@ public class TileManager {
     public TileManager(Screen screen) {
         this.screen = screen;
         tile = new Tile[6];
-        map = new int[screen.ROWS][screen.COLS];
         getTileImage();
         loadTileMap();
     }
@@ -46,16 +45,17 @@ public class TileManager {
     }
 
     public void loadTileMap() {
-
+        int rows = screen.WORLD_ROWS, cols  = screen.WORLD_COLS;
+        map = new int[rows][cols];
         try {
-            InputStream is = getClass().getResourceAsStream("/maps/map1.txt");
+            InputStream is = getClass().getResourceAsStream("/maps/worldMap.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)));
 
-            for (int row = 0; row < screen.ROWS; row++) {
+            for (int i = 0; i < rows; i++) {
                 String line = br.readLine();
                 String[] tokens = line.trim().split("\\s+");
-                for (int col = 0; col < screen.COLS; col++) {
-                    map[row][col] = Integer.parseInt(tokens[col]);
+                for (int j = 0; j < cols; j++) {
+                    map[i][j] = Integer.parseInt(tokens[j]);
                 }
             }
         } catch (NullPointerException e) {
@@ -65,15 +65,24 @@ public class TileManager {
         }
     }
 
-
     public void draw(Graphics2D g2) {
-        int x, y, tileNum;
-        for (int i = 0; i < screen.COLS; i++) {
-            for (int j = 0; j < screen.ROWS; j++) {
-                x = i * screen.TILE_SIZE;
-                y = j * screen.TILE_SIZE;
-                tileNum = map[j][i];
-                g2.drawImage(tile[tileNum].image, x, y, screen.TILE_SIZE, screen.TILE_SIZE, null);
+        int rows = screen.WORLD_ROWS;
+        int cols = screen.WORLD_COLS;
+        int tileSize = screen.TILE_SIZE;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int worldX = j * tileSize;
+                int worldY = i * tileSize;
+                int screenX = worldX - screen.player.worldX + screen.player.screenX;
+                int screenY = worldY - screen.player.worldY + screen.player.screenY;
+
+                // Check if the tile is within the screen bounds
+                if (screenX + tileSize > 0 && screenX < screen.WIDTH && screenY + tileSize > 0 && screenY < screen.HEIGHT) {
+
+                    int tileNum = map[i][j];
+                    g2.drawImage(tile[tileNum].image, screenX, screenY, tileSize, tileSize, null);
+                }
             }
         }
     }
