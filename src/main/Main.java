@@ -7,14 +7,14 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("2D Game");
+        window.setTitle("Game");
 
-        GameScreen gamePanel = new GameScreen();
-        window.add(gamePanel);
+        Screen screen = new Screen();
+        window.add(screen);
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        gamePanel.startGameThread();
+        screen.startGame();
     }
 }
