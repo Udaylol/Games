@@ -43,27 +43,27 @@ public class Screen extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double drawInterval = 1e9 / FPS;
-        double nextDrawTime = System.nanoTime() + drawInterval;
-        while (game != null) {
+        long drawInterval = 1_000_000_000L / FPS;
+        long nextDrawTime = System.nanoTime() + drawInterval;
 
-            // 1 UPDATE: update information
+        while (game != null) {
             update();
-            // 2 DRAW: draw screen with updated information
             repaint();
 
-            try {
-                double remainingTime = nextDrawTime - System.nanoTime();
-                if (remainingTime < 0) {
-                    remainingTime = 0;
-                }
-                Thread.sleep((long) remainingTime / 1000000);
-                nextDrawTime += drawInterval;
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            long sleepTime = (nextDrawTime - System.nanoTime()) / 1_000_000;
+            if (sleepTime < 0) {
+                sleepTime = 0;
             }
+            try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+            nextDrawTime += drawInterval;
         }
     }
+
 
     public void update() {
         player.update();

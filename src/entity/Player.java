@@ -48,21 +48,17 @@ public class Player extends Entity {
 
     public void update() {
         if (key.upPressed) {
-            direction = 'U';
-            y -= speed;
+            moveUp();
+            updateSprite();
         } else if (key.downPressed) {
-            direction = 'D';
-            y += speed;
+            moveDown();
+            updateSprite();
         } else if (key.leftPressed) {
-            direction = 'L';
-            x -= speed;
+            moveLeft();
+            updateSprite();
         } else if (key.rightPressed) {
-            direction = 'R';
-            x += speed;
-        }
-        if (key.upPressed || key.downPressed || key.leftPressed || key.rightPressed) {
-            spriteCnt = (spriteCnt + 1) % 20;
-            spriteIdx = (spriteCnt < 10)? 0: 1;
+            moveRight();
+            updateSprite();
         }
     }
 
@@ -75,5 +71,26 @@ public class Player extends Entity {
             default -> null;
         };
         g2.drawImage(image, x, y, screen.TILE_SIZE, screen.TILE_SIZE, null);
+    }
+
+    private void moveUp() {
+        direction = 'U';
+        y -= speed;
+    }
+    private void moveDown() {
+        direction = 'D';
+        y += speed;
+    }
+    private void moveLeft() {
+        direction = 'L';
+        x -= speed;
+    }
+    private void moveRight() {
+        direction = 'R';
+        x += speed;
+    }
+    private void updateSprite() {
+        spriteCnt = (spriteCnt + 1) % 20;
+        spriteIdx = (spriteCnt < 10) ? 0 : 1;
     }
 }

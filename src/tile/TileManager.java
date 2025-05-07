@@ -48,8 +48,8 @@ public class TileManager {
     public void loadTileMap() {
 
         try {
-            InputStream is = getClass().getResourceAsStream("/maps/map.txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            InputStream is = getClass().getResourceAsStream("/maps/map1.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)));
 
             for (int row = 0; row < screen.ROWS; row++) {
                 String line = br.readLine();
