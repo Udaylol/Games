@@ -45,21 +45,9 @@ public class Screen extends JPanel implements Runnable {
         while (game != null) {
             update();
             repaint();
-
-            long sleepTime = (nextDrawTime - System.nanoTime()) / 1_000_000;
-            if (sleepTime < 0) {
-                sleepTime = 0;
-            }
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
-            nextDrawTime += drawInterval;
+            nextDrawTime = regulateFPS(nextDrawTime, drawInterval);
         }
     }
-
 
     public void update() {
         player.update();
@@ -71,5 +59,19 @@ public class Screen extends JPanel implements Runnable {
         tileManager.draw(g2);
         player.draw(g2);
         g2.dispose();
+    }
+
+    private static long regulateFPS(long nextDrawTime, long drawInterval) {
+        long sleepTime = (nextDrawTime - System.nanoTime()) / 1_000_000;
+        if (sleepTime < 0) {
+            sleepTime = 0;
+        }
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return nextDrawTime;
+        }
+        return nextDrawTime + drawInterval;
     }
 }
