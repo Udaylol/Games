@@ -1,6 +1,8 @@
 package main;
 
 import entity.Player;
+import mechanics.CollisionManager;
+import mechanics.KeyManager;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -20,9 +22,10 @@ public class Screen extends JPanel implements Runnable {
 
     // INITIALISATION
     Thread game;
-    KeyHandler keyHandler = new KeyHandler();
+    KeyManager keyHandler = new KeyManager();
     TileManager tileManager = new TileManager(this);
-    public Player player = new Player(keyHandler);
+    public Player player = new Player(keyHandler, this);
+    public CollisionManager collisionManager = new CollisionManager();
 
     public Screen() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));

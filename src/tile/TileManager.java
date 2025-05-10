@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.Objects;
 
 public class TileManager {
-    static Tile[] tile = new Tile[6];
+    public static Tile[] tile = new Tile[6];
     Screen screen;
 
     public TileManager(Screen screen) {
@@ -25,9 +25,12 @@ public class TileManager {
             }
             tile[0].image = ImageIO.read(Objects.requireNonNull(TileManager.class.getResourceAsStream("/tiles/grass.png")));
             tile[1].image = ImageIO.read(Objects.requireNonNull(TileManager.class.getResourceAsStream("/tiles/wall.png")));
+            tile[1].isSolid = true;
             tile[2].image = ImageIO.read(Objects.requireNonNull(TileManager.class.getResourceAsStream("/tiles/water.png")));
+            tile[2].isSolid = true;
             tile[3].image = ImageIO.read(Objects.requireNonNull(TileManager.class.getResourceAsStream("/tiles/earth.png")));
             tile[4].image = ImageIO.read(Objects.requireNonNull(TileManager.class.getResourceAsStream("/tiles/tree.png")));
+            tile[4].isSolid = true;
             tile[5].image = ImageIO.read(Objects.requireNonNull(TileManager.class.getResourceAsStream("/tiles/sand.png")));
 
         } catch (IOException e) {

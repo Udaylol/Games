@@ -1,9 +1,9 @@
-package main;
+package mechanics;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class KeyHandler implements KeyListener {
+public class KeyManager implements KeyListener {
 
     public boolean upPressed, downPressed, leftPressed, rightPressed;
 

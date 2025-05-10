@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
@@ -15,4 +16,6 @@ public class Entity {
     public int spriteCnt = 0;
     public int spriteIdx = 0;
 
+    public Rectangle hitbox;
+    public boolean isColliding = false;
 }

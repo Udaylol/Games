@@ -1,7 +1,7 @@
 package entity;
 
 import main.Screen;
-import main.KeyHandler;
+import mechanics.KeyManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -9,20 +9,23 @@ import java.awt.image.BufferedImage;
 import java.util.Objects;
 
 public class Player extends Entity {
-    KeyHandler key;
-
+    KeyManager key;
+    Screen screen;
     public final int screenX;
     public final int screenY;
 
     // CONSTRUCTOR
-    public Player(KeyHandler key) {
+    public Player(KeyManager key, Screen screen) {
         this.key = key;
+        this.screen = screen;
 
         this.screenX = Screen.WIDTH / 2 - Screen.TILE_SIZE / 2;
         this.screenY = Screen.HEIGHT / 2 - Screen.TILE_SIZE / 2;
 
         this.setDefaultValues();
         this.getPlayerImage();
+
+        hitbox = new Rectangle(10, 16, 28, 26);
     }
 
     // PUBLIC METHODS
@@ -53,19 +56,28 @@ public class Player extends Entity {
     }
 
     public void update() {
-        if (key.upPressed) {
-            moveUp();
-            updateSprite();
-        } else if (key.downPressed) {
-            moveDown();
-            updateSprite();
-        } else if (key.leftPressed) {
-            moveLeft();
-            updateSprite();
-        } else if (key.rightPressed) {
-            moveRight();
-            updateSprite();
+        if (!key.upPressed && !key.downPressed && !key.leftPressed && !key.rightPressed) {
+            return;
         }
+        if (key.upPressed) {
+            direction = 'U';
+        } else if (key.downPressed) {
+            direction = 'D';
+        } else if (key.leftPressed) {
+            direction = 'L';
+        } else {
+            direction = 'R';
+        }
+        isColliding = screen.collisionManager.willCollide(this);
+        if (!isColliding) {
+            switch (direction) {
+                case 'U' -> worldY -= speed;
+                case 'D' -> worldY += speed;
+                case 'L' -> worldX -= speed;
+                case 'R' -> worldX += speed;
+            }
+        }
+        updateSprite();
     }
 
     public void draw(Graphics2D g2) {
@@ -77,26 +89,14 @@ public class Player extends Entity {
             default -> null;
         };
         g2.drawImage(image, screenX, screenY, Screen.TILE_SIZE, Screen.TILE_SIZE, null);
-    }
+        g2.setColor(Color.RED);
 
-    private void moveUp() {
-        direction = 'U';
-        worldY -= speed;
-    }
+        // Calculate the screen position of the hitbox
+        int hitboxX = screenX + hitbox.x;
+        int hitboxY = screenY + hitbox.y;
 
-    private void moveDown() {
-        direction = 'D';
-        worldY += speed;
-    }
-
-    private void moveLeft() {
-        direction = 'L';
-        worldX -= speed;
-    }
-
-    private void moveRight() {
-        direction = 'R';
-        worldX += speed;
+        // Draw the hitbox rectangle (outline)
+        g2.drawRect(hitboxX, hitboxY, hitbox.width, hitbox.height);
     }
 
     private void updateSprite() {
